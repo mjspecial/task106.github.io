@@ -1,38 +1,57 @@
 'use strict';
 
 module.exports = function countSameElements(collection) {
-    var a = [];
-    var b=1;
-    var c=0;
-    for(var i=0;i < collection.length;i++) {
-        if(collection[i] == collection[i+1]) {
-            b++;
-        }
-        else {
-            if(collection[i].length > 1) {
-                var d = collection[i];
-                if (collection[i] ==d[0]) {
-                    if (collection[i].length == 3 || collection[i].length == 4) {
-                        b += parseInt(d[2]);
-                        break;
-                    }
-                    else if (collection[i].length == 5) {
-                        b += 10;
-                        break;
-                    }
-                }
-                else if (collection[i] != d[0]) {
-                    var e = collection[i];
-                    collection[i] = e[0];
-                    b = e[2];
-                }
-            }
-            a[c] = {'name':collection[i],'summary':b};
-            c++;
-            b = 1;
-        }
-    }
-    return a;
-    
+  var result = [];
+  var collectionB = [];
+  for (var i=0;i<collection.length;){
+     var count = 0;
+     for(var j=i;j<collection.length;j++){
+         if(collection[i]==collection[j]){
+           count++;
+         }
+         else{
+             break;
+         }
+     }
+     if(collection[i].indexOf("-")>0){
+          result.push({key:collection[i].split("-")[0],count:parseInt(collection[i].split("-")[1])});
+          i++;
+          continue;
+     }
+     else if(collection[i].indexOf(":")>0){
+         result.push({key:collection[i].split(":")[0],count:parseInt(collection[i].split(":")[1])});
+          i++;
+          continue;
+     }
+     else if(collection[i].indexOf("[")>0 ){
+          result.push({key:collection[i].split("[")[0],count:parseInt(collection[i].split("[")[1])});
+          i++;
+          continue;
+     }
+     result.push({key:collection[i],count:count});
+     i+=count;
+
+  }
+  for(var i = 0;i < result.length; ){
+         var count = 0;
+         var count1=0;
+         var arr = {};
+         for(var j = i; j < result.length; j++)
+         {
+             if (result[i]['key'] == result[j]['key'])
+             {
+                 count++;
+                 count1 += result[j]['count'];
+             }
+         }
+         arr["name"] = result[i]['key'];
+         arr["summary"] = count1;
+         collectionB.push(arr);
+         i += count;
+     }
+
+
+  return collectionB;
+
     // return '实现练习要求，并改写该行代码。';
 }
